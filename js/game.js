@@ -4,6 +4,8 @@ const container = document.getElementById("container");
 const questionText = document.getElementById("question-text");
 const answerList = document.querySelectorAll(".answer-text");
 const scoreText = document.getElementById("score");
+const nextButton = document.getElementById("next-button");
+const questionNumber = document.getElementById("question-number");
 
 const CORRECT_BONUS = 10;
 const URL =
@@ -28,6 +30,7 @@ const start = () => {
 };
 
 const showQuestion = () => {
+  questionNumber.innerText = questionIndex + 1;
   const { question, answers, correctAnswerIndex } =
     formattedData[questionIndex];
   correctAnswer = correctAnswerIndex;
@@ -54,7 +57,23 @@ const checkAnswer = (event, index) => {
   }
 };
 
+const nextHndler = () => {
+  questionIndex++;
+  if (questionIndex < formattedData.length) {
+    isAccepted = true;
+    removeClasses();
+    showQuestion();
+  } else {
+    window.location.assign("/end.html")
+  }
+};
+//حذف کلاس های جواب درست و نادرست
+const removeClasses = () => {
+  answerList.forEach((button) => (button.className = "answer-text"));
+};
+
 window.addEventListener("load", fetchData);
+nextButton.addEventListener("click", nextHndler);
 //ایندکس برای مقایسه باتن کلیک شده و ایندکس جواب درست سوال
 answerList.forEach((button, index) => {
   button.addEventListener("click", (event) => checkAnswer(event, index));
